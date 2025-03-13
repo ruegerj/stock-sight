@@ -5,6 +5,7 @@ import (
 
 	"github.com/ruegerj/stock-sight/cmd"
 	"github.com/ruegerj/stock-sight/internal/db"
+	"github.com/ruegerj/stock-sight/internal/repository"
 	"github.com/spf13/cobra"
 	"go.uber.org/fx"
 )
@@ -19,6 +20,7 @@ func New() *fx.App {
 				fx.ParamTags(`group:"commands"`),
 			),
 			db.NewSQLite,
+			repository.NewSqlcAuthorRepository,
 			newAppContext,
 		),
 		fx.NopLogger, // Disable all fx logs -> even errors

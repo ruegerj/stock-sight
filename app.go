@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/ruegerj/stock-sight/cmd"
+	"github.com/ruegerj/stock-sight/internal/db"
 	"github.com/spf13/cobra"
 	"go.uber.org/fx"
 )
@@ -15,6 +16,7 @@ func New() *fx.App {
 				cmd.NewRootCmd,
 				fx.ParamTags(`group:"commands"`),
 			),
+			db.NewSQLite,
 		),
 		fx.NopLogger, // Disable all fx logs -> even errors
 		fx.Invoke(func(*cobra.Command) {}),

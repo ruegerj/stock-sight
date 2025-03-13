@@ -1,4 +1,4 @@
-# SQLC as ORM for accessing data
+# 02 - SQLC as ORM for accessing data
 
 **Status:** Proposed
 

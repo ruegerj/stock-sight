@@ -2,43 +2,36 @@ package cmd
 
 import (
 	"context"
-	"database/sql"
 	"log"
 	"reflect"
 
-	"github.com/ruegerj/stock-sight/internal/db"
-	"github.com/ruegerj/stock-sight/internal/queries"
+	"github.com/ruegerj/stock-sight/internal/repository"
 	"github.com/spf13/cobra"
 )
 
 // TODO: only for testing purposes, delete me afterwards
-func NewTestDbCmd(connection db.DbConnection) CobraCommand {
+func NewTestDbCmd(ctx context.Context, authorRepo repository.AuthorRepository) CobraCommand {
 	testDbCmd := &cobra.Command{
 		Use:   "test-db",
 		Short: "Sample cmd for test-driving sqlc",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			ctx := context.Background()
-			q := queries.New(connection.Database())
-
 			// list all authors
-			authors, err := q.ListAuthors(ctx)
+			authors, err := authorRepo.GetAll(ctx)
 			if err != nil {
 				return err
 			}
 			log.Println(authors)
 
 			// create author
-			insertedAuthor, err := q.CreateAuthor(ctx, queries.CreateAuthorParams{
-				Name: "anon",
-				Bio:  sql.NullString{String: "pwnd you already"},
-			})
+			var bio string = "pwnd you already"
+			insertedAuthor, err := authorRepo.Create(ctx, "anon", &bio)
 			if err != nil {
 				return err
 			}
 			log.Println(insertedAuthor)
 
 			// get inserted author
-			fetchedAuthor, err := q.GetAuthor(ctx, insertedAuthor.ID)
+			fetchedAuthor, err := authorRepo.GetById(ctx, insertedAuthor.ID)
 			if err != nil {
 				return err
 			}

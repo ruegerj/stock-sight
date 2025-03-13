@@ -9,39 +9,28 @@ import (
 	_ "modernc.org/sqlite"
 
 	"github.com/ruegerj/stock-sight/internal/db"
-	"github.com/ruegerj/stock-sight/internal/embedded"
+	"github.com/ruegerj/stock-sight/internal/queries"
 	"github.com/spf13/cobra"
 )
 
 // TODO: only for testing purposes, delete me afterwards
-func NewTestDbCmd() CobraCommand {
+func NewTestDbCmd(connection db.DbConnection) CobraCommand {
 	testDbCmd := &cobra.Command{
 		Use:   "test-db",
 		Short: "Sample cmd for test-driving sqlc",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx := context.Background()
-
-			database, err := sql.Open("sqlite", ":memory:")
-			if err != nil {
-				return err
-			}
-
-			// create tables
-			if _, err := database.ExecContext(ctx, embedded.DDL); err != nil {
-				return err
-			}
-
-			queries := db.New(database)
+			q := queries.New(connection.Database())
 
 			// list all authors
-			authors, err := queries.ListAuthors(ctx)
+			authors, err := q.ListAuthors(ctx)
 			if err != nil {
 				return err
 			}
 			log.Println(authors)
 
 			// create author
-			insertedAuthor, err := queries.CreateAuthor(ctx, db.CreateAuthorParams{
+			insertedAuthor, err := q.CreateAuthor(ctx, queries.CreateAuthorParams{
 				Name: "anon",
 				Bio:  sql.NullString{String: "pwnd you already"},
 			})
@@ -51,7 +40,7 @@ func NewTestDbCmd() CobraCommand {
 			log.Println(insertedAuthor)
 
 			// get inserted author
-			fetchedAuthor, err := queries.GetAuthor(ctx, insertedAuthor.ID)
+			fetchedAuthor, err := q.GetAuthor(ctx, insertedAuthor.ID)
 			if err != nil {
 				return err
 			}

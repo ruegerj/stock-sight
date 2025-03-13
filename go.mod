@@ -4,6 +4,7 @@ go 1.24.0
 
 require (
 	github.com/spf13/cobra v1.9.1
+	go.uber.org/fx v1.23.0
 	modernc.org/sqlite v1.36.0
 )
 
@@ -15,6 +16,9 @@ require (
 	github.com/ncruces/go-strftime v0.1.9 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/spf13/pflag v1.0.6 // indirect
+	go.uber.org/dig v1.18.0 // indirect
+	go.uber.org/multierr v1.10.0 // indirect
+	go.uber.org/zap v1.26.0 // indirect
 	golang.org/x/exp v0.0.0-20230315142452-642cacee5cc0 // indirect
 	golang.org/x/sys v0.30.0 // indirect
 	modernc.org/libc v1.61.13 // indirect

@@ -5,16 +5,16 @@ import (
 	"database/sql"
 	"log"
 
+	_ "modernc.org/sqlite"
+
 	"github.com/ruegerj/stock-sight/internal/embedded"
 )
 
-const sqliteDrive = "sqlite"
+const sqliteDriver = "sqlite"
 
-func NewSQLite() DbConnection {
-	ctx := context.Background()
-
+func NewSQLite(ctx context.Context) DbConnection {
 	// TODO: introduce proper configuration for db location
-	database, err := sql.Open(sqliteDrive, ":memory:")
+	database, err := sql.Open(sqliteDriver, ":memory:")
 	if err != nil {
 		log.Fatal("Failed to initialize SQLite db: ", err)
 		return nil

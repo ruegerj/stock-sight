@@ -6,8 +6,6 @@ import (
 	"log"
 	"reflect"
 
-	_ "modernc.org/sqlite"
-
 	"github.com/ruegerj/stock-sight/internal/db"
 	"github.com/ruegerj/stock-sight/internal/queries"
 	"github.com/spf13/cobra"

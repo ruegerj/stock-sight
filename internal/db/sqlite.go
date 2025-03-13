@@ -12,8 +12,7 @@ import (
 
 const sqliteDriver = "sqlite"
 
-func NewSQLite(ctx context.Context) DbConnection {
-	// TODO: introduce proper configuration for db location
+func NewInMemorySQLite(ctx context.Context) DbConnection {
 	database, err := sql.Open(sqliteDriver, ":memory:")
 	if err != nil {
 		log.Fatal("Failed to initialize SQLite db: ", err)

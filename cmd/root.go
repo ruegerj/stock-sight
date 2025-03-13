@@ -24,8 +24,25 @@ to quickly create a Cobra application.`,
 	}
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
-	// register cmd's in their correct hierarchy
-	for _, cmd := range commands {
+	registerChildCommands(rootCmd, commands)
+
+	lc.Append(fx.Hook{
+		OnStart: func(ctx context.Context) error {
+			if err := rootCmd.Execute(); err != nil {
+				fmt.Fprintf(os.Stderr, "ERROR while executing the CLI: '%s'", err)
+				_ = shutdowner.Shutdown(fx.ExitCode(1))
+			}
+			_ = shutdowner.Shutdown()
+			return nil
+		},
+	})
+
+	return rootCmd
+}
+
+// registers all child cmd's in their correct hierarchy
+func registerChildCommands(rootCmd *cobra.Command, children []CobraCommand) {
+	for _, cmd := range children {
 		parentalPath := cmd.Path()[:strings.LastIndex(cmd.Path(), " ")]
 		if parentalPath == "root" {
 			rootCmd.AddCommand(cmd.Command())
@@ -35,20 +52,7 @@ to quickly create a Cobra application.`,
 		matchesParentPath := func(c CobraCommand) bool {
 			return c.Path() == parentalPath
 		}
-		c2 := commands[slices.IndexFunc(commands, matchesParentPath)]
+		c2 := children[slices.IndexFunc(children, matchesParentPath)]
 		c2.Command().AddCommand(cmd.Command())
 	}
-
-	lc.Append(fx.Hook{
-		OnStart: func(ctx context.Context) error {
-			if err := rootCmd.Execute(); err != nil {
-				fmt.Fprintf(os.Stderr, "ERROR while executing the CLI: '%s'", err)
-				shutdowner.Shutdown(fx.ExitCode(1))
-			}
-			shutdowner.Shutdown()
-			return nil
-		},
-	})
-
-	return rootCmd
 }

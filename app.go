@@ -19,7 +19,7 @@ func New() *fx.App {
 				cmd.NewRootCmd,
 				fx.ParamTags(`group:"commands"`),
 			),
-			db.NewSQLite,
+			db.NewInMemorySQLite,
 			repository.NewSqlcAuthorRepository,
 			newAppContext,
 		),

@@ -7,3 +7,4 @@ Termnial based stock watcher (SWAT project)
 ## Contents
 
 - [Requirements, Scope & Stories](./docs/requirements.md)
+- [Architecture Decisions](./docs/decisions/decisions.md)

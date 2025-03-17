@@ -1,3 +1,5 @@
+<img src="./docs/img/logo.png" width="128" />
+
 # stock-sight
 
 [![CI](https://github.com/ruegerj/stock-sight/actions/workflows/ci.yaml/badge.svg)](https://github.com/ruegerj/stock-sight/actions/workflows/ci.yaml)

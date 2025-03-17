@@ -25,3 +25,6 @@ go.work.sum
 .env
 .envrc
 .direnv
+
+# Build output
+bin

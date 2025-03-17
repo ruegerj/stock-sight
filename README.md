@@ -12,4 +12,5 @@ Termnial based stock watcher (SWAT project)
 
 ## Links
 
+- [KanBan Board](https://github.com/users/ruegerj/projects/2)
 - [SonarQube](https://sonarcloud.io/project/overview?id=ruegerj_stock-sight)

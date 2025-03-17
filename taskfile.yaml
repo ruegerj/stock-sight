@@ -1,5 +1,11 @@
 version: "3"
 tasks:
+  run:
+    label: Run
+    desc: Runs the application locally
+    cmds:
+      - go run .
+
   build:
     label: Build
     desc: Builds the binary for the current host OS and architecture.

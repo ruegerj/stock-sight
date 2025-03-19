@@ -1,0 +1,54 @@
+version: "3"
+tasks:
+  run:
+    label: Run
+    desc: Runs the application locally
+    cmds:
+      - go run .
+
+  build:
+    label: Build
+    desc: Builds the binary for the current host OS and architecture.
+    cmds:
+      - go build -o bin/stock-sight ./main.go
+    generates:
+      - bin/stock-sight
+
+  test:
+    label: Test
+    desc: Runs all unit tests of the project.
+    cmds:
+      - go test ./...
+
+  test:cov:
+    label: Test Coverage
+    desc: Runs all unit tests and exports report to 'bin/cov.out'
+    cmds:
+      - mkdir -p bin
+      - go test -short -coverprofile=bin/cov.out `go list ./... | grep -v vendor/`
+    generates:
+      - bin/cov.out
+
+  lint:
+    label: Lint
+    desc: Runs static linters (golangci-lint)
+    cmds:
+      - golangci-lint run
+
+  query:generate:
+    label: Query Generate
+    desc: Generates query code based on sql-schema & -queries
+    cmds:
+      - sqlc generate
+
+  query:lint:
+    label: Query Lint
+    desc: Runs static syntax- & typechecks on SQL queries
+    cmds:
+      - sqlc compile
+
+  query:diff:
+    label: Query Diff
+    desc: Displays difference between generated code and queries
+    cmds:
+      - sqlc diff

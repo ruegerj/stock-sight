@@ -5,11 +5,12 @@
 [![CI](https://github.com/ruegerj/stock-sight/actions/workflows/ci.yaml/badge.svg)](https://github.com/ruegerj/stock-sight/actions/workflows/ci.yaml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ruegerj_stock-sight&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ruegerj_stock-sight)
 
-Termnial based stock watcher (SWAT project)
+Terminal based stock watcher (SWAT project)
 
 ## Contents
 
 - [Requirements, Scope & Stories](./docs/requirements.md)
+- [Architecture Decisions](./docs/decisions/decisions.md)
 - [Contributing](./CONTRIBUTING.md)
 - [Development Environment](#development-environment)
 

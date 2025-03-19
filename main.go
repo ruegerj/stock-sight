@@ -1,11 +1,17 @@
-/*
-Copyright © 2025 NAME HERE <EMAIL ADDRESS>
-
-*/
 package main
 
-import "github.com/ruegerj/stock-sight/cmd"
+import (
+	"context"
+	"log"
+	"time"
+)
 
 func main() {
-	cmd.Execute()
+	app := New()
+
+	startCtx, cancel := context.WithTimeout(context.Background(), 30*time.Minute)
+	defer cancel()
+	if err := app.Start(startCtx); err != nil {
+		log.Fatal(err)
+	}
 }

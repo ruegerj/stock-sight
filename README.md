@@ -30,7 +30,8 @@ task --list
 ### Run
 
 ```bash
-task run -- <args>
+# example: task run cmd="hello --name anon"
+task run cmd="<cmd + args>"
 ```
 
 ### Build

@@ -1,29 +1,42 @@
--- name: GetAuthor :one
-select * 
-from authors
+-- name: GetTransaction :one
+select *
+from transactions
 where id = ? limit 1;
 
--- name: ListAuthors :many
+-- name: ListTransactions :many
 select *
-from authors
-order by name;
+from transactions
+order by date desc;
 
--- name: CreateAuthor :one
-insert into authors (
-    name,
-    bio
+
+-- name: CreateTransaction :one
+insert into transactions (
+    ticker,
+    price_per_unit,
+    currency,
+    amount,
+    date,
+    is_buy
 ) values (
-    ?,
-    ?
+    ?,  -- ticker
+    ?,  -- price_per_unit
+    ?,  -- currency
+    ?,  -- amount
+    ?,  -- date
+    ?   -- is_buy
 )
 returning *;
 
--- name: UpdateAuthor :exec
-update authors
-set name = ?,
-    bio = ?
+-- name: UpdateTransaction :exec
+update transactions
+set ticker = ?,
+    price_per_unit = ?,
+    currency = ?,
+    amount = ?,
+    date = ?,
+    is_buy = ?
 where id = ?;
 
--- name: DeleteAuthor :exec
-delete from authors
+-- name: DeleteTransaction :exec
+delete from transactions
 where id = ?;

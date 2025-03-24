@@ -14,13 +14,14 @@ func New() *fx.App {
 	return fx.New(
 		fx.Provide(
 			AsCommand(cmd.NewHelloCmd),
-			AsCommand(cmd.NewTestDbCmd),
+			AsCommand(cmd.AddBuyCmd),
+			AsCommand(cmd.BuysCmd),
 			fx.Annotate(
 				cmd.NewRootCmd,
 				fx.ParamTags(`group:"commands"`),
 			),
-			db.NewInMemorySQLite,
-			repository.NewSqlcAuthorRepository,
+			db.NewSQLiteDB,
+			repository.NewSqlcTransactionRepository,
 			newAppContext,
 		),
 		fx.NopLogger, // Disable all fx logs -> even errors

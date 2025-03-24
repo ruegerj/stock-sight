@@ -7,71 +7,114 @@ package queries
 
 import (
 	"context"
-	"database/sql"
+	"time"
 )
 
-const createAuthor = `-- name: CreateAuthor :one
-insert into authors (
-    name,
-    bio
+const createTransaction = `-- name: CreateTransaction :one
+insert into transactions (
+    ticker,
+    price_per_unit,
+    currency,
+    amount,
+    date,
+    is_buy
 ) values (
-    ?,
-    ?
+    ?,  -- ticker
+    ?,  -- price_per_unit
+    ?,  -- currency
+    ?,  -- amount
+    ?,  -- date
+    ?   -- is_buy
 )
-returning id, name, bio
+returning id, ticker, price_per_unit, currency, amount, date, is_buy
 `
 
-type CreateAuthorParams struct {
-	Name string
-	Bio  sql.NullString
+type CreateTransactionParams struct {
+	Ticker       string
+	PricePerUnit float64
+	Currency     string
+	Amount       float64
+	Date         time.Time
+	IsBuy        bool
 }
 
-func (q *Queries) CreateAuthor(ctx context.Context, arg CreateAuthorParams) (Author, error) {
-	row := q.db.QueryRowContext(ctx, createAuthor, arg.Name, arg.Bio)
-	var i Author
-	err := row.Scan(&i.ID, &i.Name, &i.Bio)
+func (q *Queries) CreateTransaction(ctx context.Context, arg CreateTransactionParams) (Transaction, error) {
+	row := q.db.QueryRowContext(ctx, createTransaction,
+		arg.Ticker,
+		arg.PricePerUnit,
+		arg.Currency,
+		arg.Amount,
+		arg.Date,
+		arg.IsBuy,
+	)
+	var i Transaction
+	err := row.Scan(
+		&i.ID,
+		&i.Ticker,
+		&i.PricePerUnit,
+		&i.Currency,
+		&i.Amount,
+		&i.Date,
+		&i.IsBuy,
+	)
 	return i, err
 }
 
-const deleteAuthor = `-- name: DeleteAuthor :exec
-delete from authors
+const deleteTransaction = `-- name: DeleteTransaction :exec
+delete from transactions
 where id = ?
 `
 
-func (q *Queries) DeleteAuthor(ctx context.Context, id int64) error {
-	_, err := q.db.ExecContext(ctx, deleteAuthor, id)
+func (q *Queries) DeleteTransaction(ctx context.Context, id int64) error {
+	_, err := q.db.ExecContext(ctx, deleteTransaction, id)
 	return err
 }
 
-const getAuthor = `-- name: GetAuthor :one
-select id, name, bio 
-from authors
+const getTransaction = `-- name: GetTransaction :one
+select id, ticker, price_per_unit, currency, amount, date, is_buy
+from transactions
 where id = ? limit 1
 `
 
-func (q *Queries) GetAuthor(ctx context.Context, id int64) (Author, error) {
-	row := q.db.QueryRowContext(ctx, getAuthor, id)
-	var i Author
-	err := row.Scan(&i.ID, &i.Name, &i.Bio)
+func (q *Queries) GetTransaction(ctx context.Context, id int64) (Transaction, error) {
+	row := q.db.QueryRowContext(ctx, getTransaction, id)
+	var i Transaction
+	err := row.Scan(
+		&i.ID,
+		&i.Ticker,
+		&i.PricePerUnit,
+		&i.Currency,
+		&i.Amount,
+		&i.Date,
+		&i.IsBuy,
+	)
 	return i, err
 }
 
-const listAuthors = `-- name: ListAuthors :many
-select id, name, bio
-from authors
-order by name
+const listTransactions = `-- name: ListTransactions :many
+select id, ticker, price_per_unit, currency, amount, date, is_buy
+from transactions
+order by date desc
 `
 
-func (q *Queries) ListAuthors(ctx context.Context) ([]Author, error) {
-	rows, err := q.db.QueryContext(ctx, listAuthors)
+func (q *Queries) ListTransactions(ctx context.Context) ([]Transaction, error) {
+	rows, err := q.db.QueryContext(ctx, listTransactions)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Author
+	var items []Transaction
 	for rows.Next() {
-		var i Author
-		if err := rows.Scan(&i.ID, &i.Name, &i.Bio); err != nil {
+		var i Transaction
+		if err := rows.Scan(
+			&i.ID,
+			&i.Ticker,
+			&i.PricePerUnit,
+			&i.Currency,
+			&i.Amount,
+			&i.Date,
+			&i.IsBuy,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -85,20 +128,36 @@ func (q *Queries) ListAuthors(ctx context.Context) ([]Author, error) {
 	return items, nil
 }
 
-const updateAuthor = `-- name: UpdateAuthor :exec
-update authors
-set name = ?,
-    bio = ?
+const updateTransaction = `-- name: UpdateTransaction :exec
+update transactions
+set ticker = ?,
+    price_per_unit = ?,
+    currency = ?,
+    amount = ?,
+    date = ?,
+    is_buy = ?
 where id = ?
 `
 
-type UpdateAuthorParams struct {
-	Name string
-	Bio  sql.NullString
-	ID   int64
+type UpdateTransactionParams struct {
+	Ticker       string
+	PricePerUnit float64
+	Currency     string
+	Amount       float64
+	Date         time.Time
+	IsBuy        bool
+	ID           int64
 }
 
-func (q *Queries) UpdateAuthor(ctx context.Context, arg UpdateAuthorParams) error {
-	_, err := q.db.ExecContext(ctx, updateAuthor, arg.Name, arg.Bio, arg.ID)
+func (q *Queries) UpdateTransaction(ctx context.Context, arg UpdateTransactionParams) error {
+	_, err := q.db.ExecContext(ctx, updateTransaction,
+		arg.Ticker,
+		arg.PricePerUnit,
+		arg.Currency,
+		arg.Amount,
+		arg.Date,
+		arg.IsBuy,
+		arg.ID,
+	)
 	return err
 }

@@ -5,11 +5,15 @@
 package queries
 
 import (
-	"database/sql"
+	"time"
 )
 
-type Author struct {
-	ID   int64
-	Name string
-	Bio  sql.NullString
+type Transaction struct {
+	ID           int64
+	Ticker       string
+	PricePerUnit float64
+	Currency     string
+	Amount       float64
+	Date         time.Time
+	IsBuy        bool
 }

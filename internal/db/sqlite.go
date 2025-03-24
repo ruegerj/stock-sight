@@ -4,10 +4,10 @@ import (
 	"context"
 	"database/sql"
 	"log"
-
-	_ "modernc.org/sqlite"
+	"os"
 
 	"github.com/ruegerj/stock-sight/internal/embedded"
+	_ "modernc.org/sqlite"
 )
 
 const sqliteDriver = "sqlite"
@@ -26,6 +26,31 @@ func NewInMemorySQLite(ctx context.Context) DbConnection {
 
 	return &SQLiteDbConnection{
 		database: database,
+	}
+}
+
+func NewSQLiteDB(ctx context.Context) DbConnection {
+	dbFile := os.Getenv("SQLITE_DB_PATH_STOCK_SIGHT")
+	if dbFile == "" {
+		dbFile = "./StockSight.db"
+	}
+
+	// Open SQLite database (this creates the file if it doesn't exist)
+	db, err := sql.Open(sqliteDriver, dbFile)
+	if err != nil {
+		log.Fatal("Failed to open SQLite database: ", err)
+	}
+	if err := db.Ping(); err != nil {
+		log.Fatal("Failed to ping SQLite database: ", err)
+	}
+
+	// run setup script
+	if _, err := db.ExecContext(ctx, embedded.DDL); err != nil {
+		log.Fatal("Failed to setup database: ", err)
+	}
+
+	return &SQLiteDbConnection{
+		database: db,
 	}
 }
 

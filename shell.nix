@@ -6,5 +6,7 @@ pkgs.mkShell {
     go_1_24
     gotools
     golangci-lint
+    go-task
+    sqlc
   ];
 }

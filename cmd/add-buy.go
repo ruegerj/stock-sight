@@ -10,6 +10,15 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var FLAGS = map[string]string{
+	"stock":       "Stock ticker (name)",
+	"ppu":         "Price price per unit",
+	"amount":      "How much stock you bought",
+	"currency":    "The currency you payed (USD, EUR, CHF)",
+	"date":        "When you bought the stock 'DD.MM.YYYY hh:mm:ss' or 'now'",
+	"transaction": "'buy' or 'sell'",
+}
+
 type BuyCmdParams struct {
 	Ticker             string
 	PricePerUnit       float64
@@ -43,16 +52,17 @@ func AddBuyCmd(ctx context.Context, transactionRepo repository.TransactionReposi
 		},
 	}
 
-	addBuyCmd.PersistentFlags().String("stock", "", "Stock ticker (name)")
-	addBuyCmd.PersistentFlags().String("ppu", "", "Price price per unit")
-	addBuyCmd.PersistentFlags().String("currency", "", "The currency you payed (USD, EUR, CHF)")
-	addBuyCmd.PersistentFlags().String("amount", "", "How much stock you bought")
-	addBuyCmd.PersistentFlags().String("date", "", "when you bought the stock 'DD.MM.YYYY hh:mm:ss' or 'now'")
-	addBuyCmd.PersistentFlags().String("transaction", "", "'buy' or 'sell'")
+	registerCmdFlags(addBuyCmd)
 
 	return GenericCommand{
 		cmd:  addBuyCmd,
 		path: "root add-buy",
+	}
+}
+
+func registerCmdFlags(addBuyCmd *cobra.Command) {
+	for flag, description := range FLAGS {
+		addBuyCmd.PersistentFlags().String(flag, "", description)
 	}
 }
 

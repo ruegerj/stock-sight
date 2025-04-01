@@ -112,7 +112,6 @@ func (q *Queries) GetTrackedStockByTicker(ctx context.Context, ticker string) (T
 
 const getTransaction = `-- name: GetTransaction :one
 select
-<<<<<<< HEAD
     id,
     ticker,
     price_per_unit,
@@ -120,9 +119,6 @@ select
     amount,
     date,
     is_buy
-=======
-    id, ticker, price_per_unit, currency, amount, date, is_buy
->>>>>>> 4d11d61 (feat: add stock tracking with repository and db)
 from
     transactions
 where
@@ -180,7 +176,6 @@ func (q *Queries) ListTrackedStocks(ctx context.Context) ([]TrackedStock, error)
 
 const listTransactions = `-- name: ListTransactions :many
 select
-<<<<<<< HEAD
     id,
     ticker,
     price_per_unit,
@@ -188,9 +183,6 @@ select
     amount,
     date,
     is_buy
-=======
-    id, ticker, price_per_unit, currency, amount, date, is_buy
->>>>>>> 4d11d61 (feat: add stock tracking with repository and db)
 from
     transactions
 order by

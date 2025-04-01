@@ -3,7 +3,7 @@ package common
 import "testing"
 
 func TestDerefOrEmpty_ValueString(t *testing.T) {
-	var value string = "42"
+	var value = "42"
 
 	res := DerefOrEmpty(&value)
 

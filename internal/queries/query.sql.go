@@ -10,6 +10,25 @@ import (
 	"time"
 )
 
+const addTrackedStock = `-- name: AddTrackedStock :one
+insert into
+    tracked_stocks (ticker, date_added)
+values
+    (?, ?) returning id, ticker, date_added
+`
+
+type AddTrackedStockParams struct {
+	Ticker    string
+	DateAdded time.Time
+}
+
+func (q *Queries) AddTrackedStock(ctx context.Context, arg AddTrackedStockParams) (TrackedStock, error) {
+	row := q.db.QueryRowContext(ctx, addTrackedStock, arg.Ticker, arg.DateAdded)
+	var i TrackedStock
+	err := row.Scan(&i.ID, &i.Ticker, &i.DateAdded)
+	return i, err
+}
+
 const createTransaction = `-- name: CreateTransaction :one
 insert into
     transactions (
@@ -73,8 +92,27 @@ func (q *Queries) DeleteTransaction(ctx context.Context, id int64) error {
 	return err
 }
 
+const getTrackedStockByTicker = `-- name: GetTrackedStockByTicker :one
+select
+    id, ticker, date_added
+from
+    tracked_stocks
+where
+    ticker = ?
+limit
+    1
+`
+
+func (q *Queries) GetTrackedStockByTicker(ctx context.Context, ticker string) (TrackedStock, error) {
+	row := q.db.QueryRowContext(ctx, getTrackedStockByTicker, ticker)
+	var i TrackedStock
+	err := row.Scan(&i.ID, &i.Ticker, &i.DateAdded)
+	return i, err
+}
+
 const getTransaction = `-- name: GetTransaction :one
 select
+<<<<<<< HEAD
     id,
     ticker,
     price_per_unit,
@@ -82,6 +120,9 @@ select
     amount,
     date,
     is_buy
+=======
+    id, ticker, price_per_unit, currency, amount, date, is_buy
+>>>>>>> 4d11d61 (feat: add stock tracking with repository and db)
 from
     transactions
 where
@@ -105,8 +146,41 @@ func (q *Queries) GetTransaction(ctx context.Context, id int64) (Transaction, er
 	return i, err
 }
 
+const listTrackedStocks = `-- name: ListTrackedStocks :many
+select
+    id, ticker, date_added
+from
+    tracked_stocks
+order by
+    date_added desc
+`
+
+func (q *Queries) ListTrackedStocks(ctx context.Context) ([]TrackedStock, error) {
+	rows, err := q.db.QueryContext(ctx, listTrackedStocks)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []TrackedStock
+	for rows.Next() {
+		var i TrackedStock
+		if err := rows.Scan(&i.ID, &i.Ticker, &i.DateAdded); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listTransactions = `-- name: ListTransactions :many
 select
+<<<<<<< HEAD
     id,
     ticker,
     price_per_unit,
@@ -114,6 +188,9 @@ select
     amount,
     date,
     is_buy
+=======
+    id, ticker, price_per_unit, currency, amount, date, is_buy
+>>>>>>> 4d11d61 (feat: add stock tracking with repository and db)
 from
     transactions
 order by

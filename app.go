@@ -15,12 +15,14 @@ func New() *fx.App {
 		fx.Provide(
 			AsCommand(cmd.AddTransactionCmd),
 			AsCommand(cmd.ListTransactionsCmd),
+			AsCommand(cmd.TrackCmd),
 			fx.Annotate(
 				cmd.NewRootCmd,
 				fx.ParamTags(`group:"commands"`),
 			),
 			db.NewSQLiteDB,
 			repository.NewSqlcTransactionRepository,
+			repository.NewSqlcStockRepository,
 			newAppContext,
 		),
 		fx.NopLogger, // Disable all fx logs -> even errors

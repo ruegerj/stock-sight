@@ -25,7 +25,8 @@ tasks:
         desc: Runs all unit tests and exports report to 'bin/cov.out'
         cmds:
             - mkdir -p bin
-            - go test -short -coverprofile=bin/cov.out `go list ./... | grep -v vendor/`
+            - go test -coverprofile bin/cov.out ./...
+            - if [ "{{.show | default `false`}}" = "true" ]; then go tool cover -html=bin/cov.out; fi
         generates:
             - bin/cov.out
 

@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func TestRegisterChildCommands(t *testing.T) {
+func TestChildCommandsHaveCorrectHierarchy(t *testing.T) {
 	root := &cobra.Command{Use: "acme"}
 	child := &GenericCommand{
 		cmd:  &cobra.Command{Use: "child"},

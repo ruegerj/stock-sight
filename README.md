@@ -44,6 +44,7 @@ task build
 
 ```bash
 task test
+task test:cov show=true # show coverage report
 ```
 
 ### Schema Generate

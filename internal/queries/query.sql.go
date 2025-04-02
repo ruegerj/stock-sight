@@ -11,22 +11,24 @@ import (
 )
 
 const createTransaction = `-- name: CreateTransaction :one
-insert into transactions (
-    ticker,
-    price_per_unit,
-    currency,
-    amount,
-    date,
-    is_buy
-) values (
-    ?,  -- ticker
-    ?,  -- price_per_unit
-    ?,  -- currency
-    ?,  -- amount
-    ?,  -- date
-    ?   -- is_buy
-)
-returning id, ticker, price_per_unit, currency, amount, date, is_buy
+insert into
+    transactions (
+        ticker,
+        price_per_unit,
+        currency,
+        amount,
+        date,
+        is_buy
+    )
+values
+    (
+        ?, -- ticker
+        ?, -- price_per_unit
+        ?, -- currency
+        ?, -- amount
+        ?, -- date
+        ? -- is_buy
+    ) returning id, ticker, price_per_unit, currency, amount, date, is_buy
 `
 
 type CreateTransactionParams struct {
@@ -62,7 +64,8 @@ func (q *Queries) CreateTransaction(ctx context.Context, arg CreateTransactionPa
 
 const deleteTransaction = `-- name: DeleteTransaction :exec
 delete from transactions
-where id = ?
+where
+    id = ?
 `
 
 func (q *Queries) DeleteTransaction(ctx context.Context, id int64) error {
@@ -71,9 +74,20 @@ func (q *Queries) DeleteTransaction(ctx context.Context, id int64) error {
 }
 
 const getTransaction = `-- name: GetTransaction :one
-select id, ticker, price_per_unit, currency, amount, date, is_buy
-from transactions
-where id = ? limit 1
+select
+    id,
+    ticker,
+    price_per_unit,
+    currency,
+    amount,
+    date,
+    is_buy
+from
+    transactions
+where
+    id = ?
+limit
+    1
 `
 
 func (q *Queries) GetTransaction(ctx context.Context, id int64) (Transaction, error) {
@@ -92,9 +106,18 @@ func (q *Queries) GetTransaction(ctx context.Context, id int64) (Transaction, er
 }
 
 const listTransactions = `-- name: ListTransactions :many
-select id, ticker, price_per_unit, currency, amount, date, is_buy
-from transactions
-order by date desc
+select
+    id,
+    ticker,
+    price_per_unit,
+    currency,
+    amount,
+    date,
+    is_buy
+from
+    transactions
+order by
+    date desc
 `
 
 func (q *Queries) ListTransactions(ctx context.Context) ([]Transaction, error) {
@@ -130,13 +153,15 @@ func (q *Queries) ListTransactions(ctx context.Context) ([]Transaction, error) {
 
 const updateTransaction = `-- name: UpdateTransaction :exec
 update transactions
-set ticker = ?,
+set
+    ticker = ?,
     price_per_unit = ?,
     currency = ?,
     amount = ?,
     date = ?,
     is_buy = ?
-where id = ?
+where
+    id = ?
 `
 
 type UpdateTransactionParams struct {

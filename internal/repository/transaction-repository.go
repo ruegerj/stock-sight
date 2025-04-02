@@ -3,9 +3,10 @@ package repository
 import (
 	"context"
 	"errors"
+	"time"
+
 	"github.com/ruegerj/stock-sight/internal/db"
 	"github.com/ruegerj/stock-sight/internal/queries"
-	"time"
 )
 
 var empty = queries.Transaction{}
@@ -13,7 +14,14 @@ var empty = queries.Transaction{}
 type TransactionRepository interface {
 	GetById(ctx context.Context, id int64) (queries.Transaction, error)
 	GetAll(ctx context.Context) ([]queries.Transaction, error)
-	Create(ctx context.Context, ticker string, amount float64, currency string, ppu float64, date time.Time, isBuy bool) (queries.Transaction, error)
+	Create(ctx context.Context,
+		ticker string,
+		amount float64,
+		currency string,
+		ppu float64,
+		date time.Time,
+		isBuy bool,
+	) (queries.Transaction, error)
 	Update(ctx context.Context, transaction queries.Transaction) error
 	Delete(ctx context.Context, id int64) error
 }
@@ -40,7 +48,15 @@ func (sar *SqlcTransactionRepository) GetById(ctx context.Context, id int64) (qu
 	return sar.queries.GetTransaction(ctx, id)
 }
 
-func (sar *SqlcTransactionRepository) Create(ctx context.Context, ticker string, amount float64, currency string, ppu float64, date time.Time, isBuy bool) (queries.Transaction, error) {
+func (sar *SqlcTransactionRepository) Create(
+	ctx context.Context,
+	ticker string,
+	amount float64,
+	currency string,
+	ppu float64,
+	date time.Time,
+	isBuy bool,
+) (queries.Transaction, error) {
 
 	createParams := queries.CreateTransactionParams{
 		Ticker:       ticker,
@@ -57,6 +73,7 @@ func (sar *SqlcTransactionRepository) Create(ctx context.Context, ticker string,
 func (sar *SqlcTransactionRepository) Update(ctx context.Context, transaction queries.Transaction) error {
 
 	updateParams := queries.UpdateTransactionParams{
+		ID:           transaction.ID,
 		Ticker:       transaction.Ticker,
 		Amount:       transaction.Amount,
 		Currency:     transaction.Currency,

@@ -1,42 +1,66 @@
 -- name: GetTransaction :one
-select *
-from transactions
-where id = ? limit 1;
-
--- name: ListTransactions :many
-select *
-from transactions
-order by date desc;
-
-
--- name: CreateTransaction :one
-insert into transactions (
+select
+    id,
     ticker,
     price_per_unit,
     currency,
     amount,
     date,
     is_buy
-) values (
-    ?,  -- ticker
-    ?,  -- price_per_unit
-    ?,  -- currency
-    ?,  -- amount
-    ?,  -- date
-    ?   -- is_buy
-)
-returning *;
+from
+    transactions
+where
+    id = ?
+limit
+    1;
+
+-- name: ListTransactions :many
+select
+    id,
+    ticker,
+    price_per_unit,
+    currency,
+    amount,
+    date,
+    is_buy
+from
+    transactions
+order by
+    date desc;
+
+-- name: CreateTransaction :one
+insert into
+    transactions (
+        ticker,
+        price_per_unit,
+        currency,
+        amount,
+        date,
+        is_buy
+    )
+values
+    (
+        ?, -- ticker
+        ?, -- price_per_unit
+        ?, -- currency
+        ?, -- amount
+        ?, -- date
+        ? -- is_buy
+    ) returning *;
 
 -- name: UpdateTransaction :exec
 update transactions
-set ticker = ?,
+set
+    ticker = ?,
     price_per_unit = ?,
     currency = ?,
     amount = ?,
     date = ?,
     is_buy = ?
-where id = ?;
+where
+    id = ?;
 
 -- name: DeleteTransaction :exec
 delete from transactions
-where id = ?;
+where
+    id = ?;

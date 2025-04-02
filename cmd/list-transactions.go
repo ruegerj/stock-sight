@@ -3,14 +3,15 @@ package cmd
 import (
 	"context"
 	"fmt"
+
 	"github.com/ruegerj/stock-sight/internal/repository"
 	"github.com/spf13/cobra"
 )
 
-func BuysCmd(ctx context.Context, transactionRepo repository.TransactionRepository) CobraCommand {
+func ListTransactionsCmd(ctx context.Context, transactionRepo repository.TransactionRepository) CobraCommand {
 	buysCmd := &cobra.Command{
-		Use:   "buys",
-		Short: "See all your buys",
+		Use:   "trxs",
+		Short: "See all your stock transactions",
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			transactions, err := transactionRepo.GetAll(ctx)
@@ -25,7 +26,13 @@ func BuysCmd(ctx context.Context, transactionRepo repository.TransactionReposito
 				if transaction.IsBuy {
 					transactionType = "buy"
 				}
-				fmt.Printf("Ticker: {%s} |Ppu: {%f} {%s} |Amount: {%f} | Date: {%s} | Buy: {%s} \n", transaction.Ticker, transaction.PricePerUnit, transaction.Currency, transaction.Amount, transaction.Date.Format("02.01.2006 15:04:05"), transactionType)
+				fmt.Printf("Ticker: {%s} |Ppu: {%f} {%s} |Amount: {%f} | Date: {%s} | Buy: {%s} \n",
+					transaction.Ticker,
+					transaction.PricePerUnit,
+					transaction.Currency,
+					transaction.Amount,
+					transaction.Date.Format("02.01.2006 15:04:05"),
+					transactionType)
 			}
 
 			return nil
@@ -34,6 +41,6 @@ func BuysCmd(ctx context.Context, transactionRepo repository.TransactionReposito
 
 	return GenericCommand{
 		cmd:  buysCmd,
-		path: "root buys",
+		path: "root trxs",
 	}
 }

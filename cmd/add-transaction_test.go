@@ -13,7 +13,7 @@ func TestParseBuyCmdFlags(t *testing.T) {
 	tests := []struct {
 		name       string
 		setupFlags map[string]string
-		wantParams cmd.BuyCmdParams
+		wantParams cmd.AddTransactionCmdParams
 		wantErrMsg string
 	}{
 		{
@@ -26,7 +26,7 @@ func TestParseBuyCmdFlags(t *testing.T) {
 				"date":        "24.03.2025 15:04:05",
 				"transaction": "buy",
 			},
-			wantParams: cmd.BuyCmdParams{
+			wantParams: cmd.AddTransactionCmdParams{
 				Ticker:             "AAPL",
 				PricePerUnit:       150.50,
 				Amount:             10,
@@ -45,7 +45,7 @@ func TestParseBuyCmdFlags(t *testing.T) {
 				"date":        "24.03.2025 15:04:05",
 				"transaction": "sell",
 			},
-			wantParams: cmd.BuyCmdParams{
+			wantParams: cmd.AddTransactionCmdParams{
 				Ticker:             "AAPL",
 				PricePerUnit:       150.50,
 				Amount:             10,

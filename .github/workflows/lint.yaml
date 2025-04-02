@@ -1,37 +1,37 @@
 name: Lint
 on:
-  workflow_dispatch:
-  workflow_call:
+    workflow_dispatch:
+    workflow_call:
 
 permissions:
-  contents: read
+    contents: read
 
 jobs:
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: "1.24"
+    lint:
+        name: Lint
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-go@v5
+              with:
+                  go-version: "1.24"
 
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v6
+            - name: golangci-lint
+              uses: golangci/golangci-lint-action@v6
 
-  sonarqube:
-    name: SonarQube
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-go@v5
-        with:
-          go-version: "1.24"
-      - name: Detect Code Coverage
-        run: mkdir -p bin && go test -short -coverprofile=bin/cov.out `go list ./... | grep -v vendor/`
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v5.0.0
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    sonarqube:
+        name: SonarQube
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+            - uses: actions/setup-go@v5
+              with:
+                  go-version: "1.24"
+            - name: Detect Code Coverage
+              run: mkdir -p bin && go test -coverprofile bin/cov.out ./...
+            - name: SonarQube Scan
+              uses: SonarSource/sonarqube-scan-action@v5.0.0
+              env:
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

@@ -19,7 +19,7 @@ var FLAGS = map[string]string{
 	"transaction": "'buy' or 'sell'",
 }
 
-type BuyCmdParams struct {
+type AddTransactionCmdParams struct {
 	Ticker             string
 	PricePerUnit       float64
 	Currency           string
@@ -28,25 +28,36 @@ type BuyCmdParams struct {
 	TransactionTypeBuy bool
 }
 
-func AddBuyCmd(ctx context.Context, transactionRepo repository.TransactionRepository) CobraCommand {
+func AddTransactionCmd(ctx context.Context, transactionRepo repository.TransactionRepository) CobraCommand {
 	addBuyCmd := &cobra.Command{
-		Use:   "add-buy",
-		Short: "Adds a buy for a stock to your portfolio",
+		Use:   "add-trx",
+		Short: "Adds a transaction for a stock to your portfolio",
 		RunE: func(cmd *cobra.Command, args []string) error {
-
 			params, err := ParseBuyCmdFlags(cmd)
 			if err != nil {
-				fmt.Print(err.Error())
-				return nil
+				return err
 			}
 
-			_, err = transactionRepo.Create(ctx, params.Ticker, params.Amount, params.Currency, params.PricePerUnit, params.Date, params.TransactionTypeBuy)
+			_, err = transactionRepo.Create(ctx,
+				params.Ticker,
+				params.Amount,
+				params.Currency,
+				params.PricePerUnit,
+				params.Date,
+				params.TransactionTypeBuy)
+
 			if err != nil {
 				return err
 			}
 
 			fmt.Printf("Added the following transaction to the Portfolio\n")
-			fmt.Printf("Ticker: {%s} |Ppu: {%f} {%s} |Amount: {%f} | Date: {%s} | Buy: {%t} \n", params.Ticker, params.PricePerUnit, params.Currency, params.Amount, params.Date.Format("02.01.2006 15:04:05"), params.TransactionTypeBuy)
+			fmt.Printf("Ticker: {%s} |Ppu: {%f} {%s} |Amount: {%f} | Date: {%s} | Buy: {%t} \n",
+				params.Ticker,
+				params.PricePerUnit,
+				params.Currency,
+				params.Amount,
+				params.Date.Format("02.01.2006 15:04:05"),
+				params.TransactionTypeBuy)
 
 			return nil
 		},
@@ -56,7 +67,7 @@ func AddBuyCmd(ctx context.Context, transactionRepo repository.TransactionReposi
 
 	return GenericCommand{
 		cmd:  addBuyCmd,
-		path: "root add-buy",
+		path: "root add-trx",
 	}
 }
 
@@ -66,8 +77,7 @@ func registerCmdFlags(addBuyCmd *cobra.Command) {
 	}
 }
 
-// TODO: further refactor later
-func ParseBuyCmdFlags(cmd *cobra.Command) (BuyCmdParams, error) {
+func ParseBuyCmdFlags(cmd *cobra.Command) (AddTransactionCmdParams, error) {
 	errorText := ""
 	ticker := cmd.Flag("stock").Value.String()
 	if len(ticker) < 3 {
@@ -106,10 +116,10 @@ func ParseBuyCmdFlags(cmd *cobra.Command) (BuyCmdParams, error) {
 	isBuy := transactionStr == "buy"
 
 	if errorText != "" {
-		return BuyCmdParams{}, fmt.Errorf("error: \n%s", errorText)
+		return AddTransactionCmdParams{}, fmt.Errorf("error: \n%s", errorText)
 	}
 
-	return BuyCmdParams{
+	return AddTransactionCmdParams{
 		Ticker:             ticker,
 		PricePerUnit:       ppu,
 		Currency:           currency,

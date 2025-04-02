@@ -13,9 +13,8 @@ import (
 func New() *fx.App {
 	return fx.New(
 		fx.Provide(
-			AsCommand(cmd.NewHelloCmd),
-			AsCommand(cmd.AddBuyCmd),
-			AsCommand(cmd.BuysCmd),
+			AsCommand(cmd.AddTransactionCmd),
+			AsCommand(cmd.ListTransactionsCmd),
 			fx.Annotate(
 				cmd.NewRootCmd,
 				fx.ParamTags(`group:"commands"`),
@@ -25,7 +24,7 @@ func New() *fx.App {
 			newAppContext,
 		),
 		fx.NopLogger, // Disable all fx logs -> even errors
-		fx.Invoke(func(*cobra.Command) {}),
+		fx.Invoke(func(*cobra.Command) { /* invoke root cmd -> delegate to cobra for further execution */ }),
 	)
 }
 

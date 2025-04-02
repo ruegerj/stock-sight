@@ -1,45 +1,43 @@
 package repository_test
 
 import (
-	"context"
 	"testing"
 	"time"
 
-	"github.com/ruegerj/stock-sight/internal/db"
-	"github.com/ruegerj/stock-sight/internal/repository"
 	"github.com/stretchr/testify/assert"
 )
 
-var dbConn db.DbConnection
-var repo repository.StockRepository
-
-func TestMain(m *testing.M) {
-	ctx := context.Background()
-	dbConn = db.NewInMemorySQLite(ctx)
-	repo = repository.NewSqlcStockRepository(dbConn)
-}
-
 func TestSqlcStockRepository_AddTrackedStock(t *testing.T) {
 	ticker := "AAPL"
-	date := time.Now()
+	date := time.Date(2025, time.January, 1, 0, 0, 0, 0, time.UTC)
 
-	stock, err := repo.AddTrackedStock(context.Background(), ticker, date)
+	stock, err := stockRepo.AddTrackedStock(t.Context(), ticker, date)
 
 	assert.NoError(t, err)
 	assert.Equal(t, ticker, stock.Ticker)
 	assert.NotZero(t, stock.DateAdded)
 }
 
+func TestSqlcStockRepository_AddTrackedStock_FailForEmptyTicker(t *testing.T) {
+	ticker := ""
+	date := time.Date(2025, time.January, 1, 0, 0, 0, 0, time.UTC)
+
+	_, err := stockRepo.AddTrackedStock(t.Context(), ticker, date)
+
+	assert.ErrorContains(t, err, "supply a valid stock ticker")
+}
+
 func TestSqlcStockRepository_GetTrackedStocks(t *testing.T) {
-	_, err := repo.AddTrackedStock(context.Background(), "AAPL", time.Now())
+	_, err := stockRepo.AddTrackedStock(t.Context(), "AAPL", time.Now())
 	assert.NoError(t, err)
-	_, err = repo.AddTrackedStock(context.Background(), "GOOGL", time.Now())
+	_, err = stockRepo.AddTrackedStock(t.Context(), "GOOGL", time.Now())
 	assert.NoError(t, err)
 
-	stocks, err := repo.GetTrackedStocks(context.Background())
+	stocks, err := stockRepo.GetTrackedStocks(t.Context())
 
 	assert.NoError(t, err)
-	assert.Len(t, stocks, 2)
-	assert.Equal(t, "AAPL", stocks[0].Ticker)
-	assert.Equal(t, "GOOGL", stocks[1].Ticker)
+	assert.GreaterOrEqual(t, len(stocks), 2)
+	// check for descending order
+	assert.Equal(t, "GOOGL", stocks[0].Ticker)
+	assert.Equal(t, "AAPL", stocks[1].Ticker)
 }

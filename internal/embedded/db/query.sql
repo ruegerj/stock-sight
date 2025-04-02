@@ -81,7 +81,9 @@ order by
 
 -- name: GetTrackedStockByTicker :one
 select
-    *
+    id,
+    ticker,
+    date_added
 from
     tracked_stocks
 where

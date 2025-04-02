@@ -94,7 +94,9 @@ func (q *Queries) DeleteTransaction(ctx context.Context, id int64) error {
 
 const getTrackedStockByTicker = `-- name: GetTrackedStockByTicker :one
 select
-    id, ticker, date_added
+    id,
+    ticker,
+    date_added
 from
     tracked_stocks
 where

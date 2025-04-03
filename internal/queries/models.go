@@ -8,6 +8,12 @@ import (
 	"time"
 )
 
+type TrackedStock struct {
+	ID        int64
+	Ticker    string
+	DateAdded time.Time
+}
+
 type Transaction struct {
 	ID           int64
 	Ticker       string

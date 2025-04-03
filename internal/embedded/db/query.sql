@@ -64,3 +64,29 @@ where
 delete from transactions
 where
     id = ?;
+
+-- name: AddTrackedStock :one
+insert into
+    tracked_stocks (ticker, date_added)
+values
+    (?, ?) returning *;
+
+-- name: ListTrackedStocks :many
+select
+    *
+from
+    tracked_stocks
+order by
+    date_added desc;
+
+-- name: GetTrackedStockByTicker :one
+select
+    id,
+    ticker,
+    date_added
+from
+    tracked_stocks
+where
+    ticker = ?
+limit
+    1;

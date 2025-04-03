@@ -15,6 +15,7 @@ func New() *fx.App {
 		fx.Provide(
 			AsCommand(cmd.AddTransactionCmd),
 			AsCommand(cmd.ListTransactionsCmd),
+			AsCommand(cmd.ShowTuiCmd),
 			fx.Annotate(
 				cmd.NewRootCmd,
 				fx.ParamTags(`group:"commands"`),

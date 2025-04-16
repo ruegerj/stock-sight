@@ -11,6 +11,7 @@ Terminal based stock watcher (SWAT project)
 
 - [Requirements, Scope & Stories](./docs/requirements.md)
 - [Architecture Decisions](./docs/decisions/decisions.md)
+- [C4 Diagram](./docs/diagrams/c4.md)
 - [Contributing](./CONTRIBUTING.md)
 - [Development Environment](#development-environment)
 

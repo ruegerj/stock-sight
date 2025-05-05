@@ -48,7 +48,7 @@ func ShowPriceHistoryCmd(
 			}
 
 			isStockTracked := slices.ContainsFunc(trackedStocks, func(stock queries.TrackedStock) bool {
-				return strings.ToUpper(stock.Ticker) == strings.ToUpper(ticker)
+				return strings.EqualFold(stock.Ticker, ticker)
 			})
 
 			if !isStockTracked {
@@ -82,7 +82,7 @@ func ShowPriceHistoryCmd(
 			}
 
 			tslc.DrawBrailleAll()
-			fmt.Println(fmt.Sprintf("Price history of %q (%s)", ticker, timespan))
+			fmt.Printf("\nPrice history of %q (%s)", ticker, timespan)
 			fmt.Println(tslc.View())
 			return nil
 		},

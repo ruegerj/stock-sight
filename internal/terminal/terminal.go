@@ -9,7 +9,7 @@ const stdHeightDeduction int = 5
 
 type TerminalAccessor struct{}
 
-func NewTerminalAccesor() TerminalAccessor {
+func NewTerminalAccessor() TerminalAccessor {
 	return TerminalAccessor{}
 }
 

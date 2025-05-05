@@ -22,6 +22,7 @@ const timespanFlag = "timespan"
 func ShowPriceHistoryCmd(
 	ctx context.Context,
 	stockRepository repository.StockRepository,
+	dataProvider stocks.StockDataProvider,
 	terminalAccessor terminal.TerminalAccessor) CobraCommand {
 	showPriceHistCmd := &cobra.Command{
 		Use:   "hist <ticker>",
@@ -74,15 +75,17 @@ func ShowPriceHistoryCmd(
 				height,
 				timeserieslinechart.WithXLabelFormatter(timestampFormatter))
 
-			generator := stocks.NewFakeDataGenerator(150.56, 0.05, time.Now().UnixNano())
-			stockData := generator.GenerateForTimeSpan(timespan)
+			stockData, err := dataProvider.ProvideFor(ticker, parseTimespan(timespan), "USD")
+			if err != nil {
+				return err
+			}
 
 			for _, point := range stockData {
 				tslc.Push(timeserieslinechart.TimePoint{Time: point.Timestamp, Value: point.Price})
 			}
 
 			tslc.DrawBrailleAll()
-			fmt.Printf("\nPrice history of %q (%s)", ticker, timespan)
+			fmt.Printf("Price history of %q (%s)\n", ticker, timespan)
 			fmt.Println(tslc.View())
 			return nil
 		},
@@ -94,6 +97,27 @@ func ShowPriceHistoryCmd(
 		cmd:  showPriceHistCmd,
 		path: "root hist",
 	}
+}
+
+func parseTimespan(raw string) stocks.Timespan {
+	switch raw {
+	case "d":
+		return stocks.LAST_DAY
+
+	case "w":
+		return stocks.LAST_WEEK
+
+	case "m":
+		return stocks.LAST_MONTH
+
+	case "y":
+		return stocks.LAST_YEAR
+
+	case "y2d":
+		return stocks.YEAR_TO_DAY
+	}
+
+	return -1
 }
 
 func isValidTimespanFlag(value string) bool {

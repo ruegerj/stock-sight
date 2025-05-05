@@ -196,7 +196,7 @@ it allows/demands one to write all queries from hand in order to optimize for th
 -   Potentially bad, because it lacks some quality of life features compared to GORM. However these wont be needed for the current
     scope of the project.
 
-## 9.3 Dependncy Injection in combination with an IoC Container
+## 9.3 Dependency Injection in combination with an IoC Container
 
 **Status:** Proposed
 

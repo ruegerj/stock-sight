@@ -25,7 +25,7 @@ func New() *fx.App {
 			db.NewSQLiteDB,
 			repository.NewSqlcTransactionRepository,
 			repository.NewSqlcStockRepository,
-			terminal.NewTerminalAccessor,
+			terminal.NewTerminalAccesor,
 			newAppContext,
 		),
 		fx.NopLogger, // Disable all fx logs -> even errors

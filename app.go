@@ -16,6 +16,7 @@ func New() *fx.App {
 			AsCommand(cmd.AddTransactionCmd),
 			AsCommand(cmd.ListTransactionsCmd),
 			AsCommand(cmd.TrackCmd),
+			AsCommand(cmd.ShowPriceHistoryCmd),
 			fx.Annotate(
 				cmd.NewRootCmd,
 				fx.ParamTags(`group:"commands"`),

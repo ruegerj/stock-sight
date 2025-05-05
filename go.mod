@@ -4,7 +4,6 @@ go 1.24.0
 
 require (
 	github.com/NimbleMarkets/ntcharts v0.3.1
-	github.com/charmbracelet/x/term v0.2.1
 	github.com/spf13/cobra v1.9.1
 	go.uber.org/fx v1.23.0
 	modernc.org/sqlite v1.36.0
@@ -16,6 +15,7 @@ require (
 	github.com/charmbracelet/bubbletea v1.2.2 // indirect
 	github.com/charmbracelet/lipgloss v1.0.0 // indirect
 	github.com/charmbracelet/x/ansi v0.4.5 // indirect
+	github.com/charmbracelet/x/term v0.2.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/erikgeiser/coninput v0.0.0-20211004153227-1c3628e74d0f // indirect
 	github.com/lrstanley/bubblezone v0.0.0-20240914071701-b48c55a5e78e // indirect

@@ -7,6 +7,10 @@ import (
 // due to some terminal configs displaying the current state and command input on multiple lines
 const stdHeightDeduction int = 5
 
+// allow monkey-patching in tests
+var termIsTerminal = term.IsTerminal
+var termGetSize = term.GetSize
+
 type TerminalAccessor struct{}
 
 func NewTerminalAccessor() TerminalAccessor {
@@ -14,11 +18,11 @@ func NewTerminalAccessor() TerminalAccessor {
 }
 
 func (hp TerminalAccessor) ResolveDimensions() (widht int, height int) {
-	if !term.IsTerminal(0) {
+	if !termIsTerminal(0) {
 		return -1, -1
 	}
 
-	widht, height, err := term.GetSize(0)
+	widht, height, err := termGetSize(0)
 	if err != nil {
 		panic(err)
 	}

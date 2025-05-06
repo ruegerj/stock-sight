@@ -103,16 +103,12 @@ func parseTimespan(raw string) stocks.Timespan {
 	switch raw {
 	case "d":
 		return stocks.LAST_DAY
-
 	case "w":
 		return stocks.LAST_WEEK
-
 	case "m":
 		return stocks.LAST_MONTH
-
 	case "y":
 		return stocks.LAST_YEAR
-
 	case "y2d":
 		return stocks.YEAR_TO_DAY
 	}

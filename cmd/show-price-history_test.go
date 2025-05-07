@@ -109,6 +109,8 @@ func TestShowPriceHistoryCmd_ResolveDataForCorrectTimespan(t *testing.T) {
 	}, nil).Times(len(tests))
 	terminalAccessor := new(MockTerminalAccessor)
 	terminalAccessor.On("ResolveDimensions", mock.Anything).Return(100, 50, nil).Times(len(tests))
+	terminalAccessor.On("Printf", mock.Anything, mock.Anything).Return(0, nil)
+	terminalAccessor.On("Println", mock.Anything).Return(0, nil)
 	stockDataProvider := new(MockStockDataProvider)
 	stockDataProvider.On("ProvideFor", mock.Anything, mock.Anything, mock.Anything).
 		Return([]stocks.StockDataPoint{}, nil).

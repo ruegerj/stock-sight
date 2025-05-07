@@ -1,6 +1,8 @@
 package terminal
 
 import (
+	"fmt"
+
 	"github.com/charmbracelet/x/term"
 )
 
@@ -12,6 +14,8 @@ var termIsTerminal = term.IsTerminal
 var termGetSize = term.GetSize
 
 type TerminalAccessor interface {
+	Println(a ...any) (n int, err error)
+	Printf(format string, a ...any) (n int, err error)
 	ResolveDimensions() (width, height int)
 }
 
@@ -19,6 +23,14 @@ type ConcreteTerminaAccessor struct{}
 
 func NewTerminalAccessor() TerminalAccessor {
 	return ConcreteTerminaAccessor{}
+}
+
+func (ta ConcreteTerminaAccessor) Println(a ...any) (int, error) {
+	return fmt.Println(a...)
+}
+
+func (ts ConcreteTerminaAccessor) Printf(format string, a ...any) (int, error) {
+	return fmt.Printf(format, a...)
 }
 
 func (ta ConcreteTerminaAccessor) ResolveDimensions() (width int, height int) {

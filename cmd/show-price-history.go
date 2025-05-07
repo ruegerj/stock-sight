@@ -3,7 +3,6 @@ package cmd
 import (
 	"context"
 	"errors"
-	"fmt"
 	"slices"
 	"strings"
 	"time"
@@ -85,8 +84,8 @@ func ShowPriceHistoryCmd(
 			}
 
 			tslc.DrawBrailleAll()
-			fmt.Printf("Price history of %q (%s)\n", ticker, timespan)
-			fmt.Println(tslc.View())
+			terminalAccessor.Printf("Price history of %q (%s)\n", ticker, timespan)
+			terminalAccessor.Println(tslc.View())
 			return nil
 		},
 	}

@@ -29,6 +29,16 @@ type MockTerminalAccessor struct {
 	mock.Mock
 }
 
+func (mta *MockTerminalAccessor) Printf(format string, a ...any) (n int, err error) {
+	args := mta.Called(format, a)
+	return args.Get(0).(int), args.Error(1)
+}
+
+func (mta *MockTerminalAccessor) Println(a ...any) (n int, err error) {
+	args := mta.Called(a)
+	return args.Get(0).(int), args.Error(1)
+}
+
 func (mta *MockTerminalAccessor) ResolveDimensions() (width int, height int) {
 	args := mta.Called()
 	return args.Get(0).(int), args.Get(1).(int)

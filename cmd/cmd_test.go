@@ -62,7 +62,10 @@ func applyFlagsTo(t *testing.T, cmd *cobra.Command, flags map[string]string) {
 			t.Fatalf("failed to set flag %q", key)
 		}
 
-		flag.Value.Set(value)
+		err := flag.Value.Set(value)
+		if err != nil {
+			t.Fatal(err)
+		}
 	}
 }
 

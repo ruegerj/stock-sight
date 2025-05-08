@@ -9,6 +9,7 @@ Terminal based stock watcher (SWAT project)
 
 ## Contents
 
+- [Architecture Documentation](./docs/architecture.md)
 - [Requirements, Scope & Stories](./docs/requirements.md)
 - [Architecture Decisions](./docs/decisions/decisions.md)
 - [C4 Diagram](./docs/diagrams/c4.md)

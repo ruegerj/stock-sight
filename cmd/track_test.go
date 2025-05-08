@@ -11,22 +11,8 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-type MockTransactionRepo struct {
-	mock.Mock
-}
-
-func (m *MockTransactionRepo) AddTrackedStock(ctx context.Context, ticker string, date time.Time) (queries.TrackedStock, error) {
-	args := m.Called(ctx, ticker, date)
-	return args.Get(0).(queries.TrackedStock), args.Error(1)
-}
-
-func (m *MockTransactionRepo) GetTrackedStocks(ctx context.Context) ([]queries.TrackedStock, error) {
-	args := m.Called(ctx)
-	return args.Get(0).([]queries.TrackedStock), args.Error(1)
-}
-
 func TestTrackCommand(t *testing.T) {
-	mockRepo := new(MockTransactionRepo)
+	mockRepo := new(MockStockRepository)
 
 	trackCmd := cmd.TrackCmd(context.Background(), mockRepo).Command()
 

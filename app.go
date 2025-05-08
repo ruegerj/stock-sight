@@ -6,6 +6,7 @@ import (
 	"github.com/ruegerj/stock-sight/cmd"
 	"github.com/ruegerj/stock-sight/internal/db"
 	"github.com/ruegerj/stock-sight/internal/repository"
+	"github.com/ruegerj/stock-sight/internal/stocks"
 	"github.com/ruegerj/stock-sight/internal/terminal"
 	"github.com/spf13/cobra"
 	"go.uber.org/fx"
@@ -26,6 +27,7 @@ func New() *fx.App {
 			repository.NewSqlcTransactionRepository,
 			repository.NewSqlcStockRepository,
 			terminal.NewTerminalAccessor,
+			stocks.NewFakeDataGenerator,
 			newAppContext,
 		),
 		fx.NopLogger, // Disable all fx logs -> even errors

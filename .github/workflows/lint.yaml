@@ -32,6 +32,6 @@ jobs:
             - name: Detect Code Coverage
               run: mkdir -p bin && go test -coverprofile bin/cov.out ./...
             - name: SonarQube Scan
-              uses: SonarSource/sonarqube-scan-action@v5.0.0
+              uses: SonarSource/sonarqube-scan-action@v5.3.1
               env:
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
